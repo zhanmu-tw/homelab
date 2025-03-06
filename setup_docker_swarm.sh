@@ -5,30 +5,30 @@ set -e
 
 # Step 1: Update the system
 echo "Updating the system..."
-sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install -y curl ca-certificates gnupg lsb-release nfs-common
+apt-get update && apt-get upgrade -y
+apt-get install -y curl ca-certificates gnupg lsb-release nfs-common
 
 # Step 2: Add Docker's official GPG key
 echo "Adding Docker's official GPG key..."
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
 
 # Step 3: Add Docker repository to Apt sources
 echo "Adding Docker repository..."
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+  tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update
 
 # Step 4: Install Docker packages
 echo "Installing Docker..."
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+apt-get install -y docker-ce docker-ce-cli containerd.io
 
 # Step 5: Enable and start Docker service
 echo "Enabling and starting Docker service..."
-sudo systemctl enable --now docker
+systemctl enable --now docker
 
 # Step 6: Set up NFS share (example for your Synology NAS)
 echo "Setting up NFS mount from Synology NAS..."
@@ -37,13 +37,13 @@ NFS_SHARE="/volume1/docker_data"  # Replace with the NFS share directory on your
 MOUNT_POINT="/mnt/nfs/docker_data"
 
 # Create the mount point
-sudo mkdir -p $MOUNT_POINT
+mkdir -p $MOUNT_POINT
 
 # Mount the NFS share
-sudo mount -t nfs $NFS_SERVER:$NFS_SHARE $MOUNT_POINT
+mount -t nfs $NFS_SERVER:$NFS_SHARE $MOUNT_POINT
 
 # Make the mount permanent by adding it to /etc/fstab
-echo "$NFS_SERVER:$NFS_SHARE $MOUNT_POINT nfs defaults 0 0" | sudo tee -a /etc/fstab
+echo "$NFS_SERVER:$NFS_SHARE $MOUNT_POINT nfs defaults 0 0" | tee -a /etc/fstab
 
 # Step 7: Initialize Docker Swarm
 echo "Initializing Docker Swarm..."
