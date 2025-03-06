@@ -32,7 +32,7 @@ systemctl enable --now docker
 
 # Step 6: Set up NFS share (example for your Synology NAS)
 echo "Setting up NFS mount from Synology NAS..."
-NFS_SERVER="192.168.0.233"   # Replace with your NAS IP address
+NFS_SERVER="192.168.0.3"   # Replace with your NAS IP address
 NFS_SHARE="/volume1/docker_data"  # Replace with the NFS share directory on your NAS
 MOUNT_POINT="/mnt/nfs/docker_data"
 
